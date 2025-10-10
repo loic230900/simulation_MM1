@@ -1,0 +1,1 @@
+/*class regroupant totues les méthodes statiques utile(tirage aléatoire, etc) */

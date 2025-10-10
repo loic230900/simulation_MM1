@@ -1,0 +1,1 @@
+/*classe  regroupant la collecte et l'affichage des résultats */
