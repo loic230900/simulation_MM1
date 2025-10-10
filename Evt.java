@@ -1,12 +1,13 @@
 /*classe des évenements: arrivées et départs */
 
-
 public class Evt{
+    //types d'évènements
     public static final int ARRIVEE = 1; 
     public static final int DEPART = 2;
     
     private double date; //date de l'évènement
     private int type; //type de l'évènement 
+
 
     //constructeur
     /**
