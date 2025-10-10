@@ -40,6 +40,4 @@ public class Ech{
     public boolean estVide(){
         return ech.isEmpty();
     }
-
-
 }

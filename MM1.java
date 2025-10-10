@@ -1,5 +1,4 @@
 /*classe principale */
-
-public class MM1 {
+public class MM1{
     
 }
