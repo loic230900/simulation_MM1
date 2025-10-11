@@ -73,7 +73,7 @@ public class Stats{
         double dureeSejour = dateDepart - dateArrivee;
         sommeDureesSejour += dureeSejour;
         if (debug) {
-        System.out.println("Date=" + dateDepart + " Depart client #" + (totalDepart - 1) + " arrive a t=" + dateArrivee);
+            System.out.println("Date=" + dateDepart + " Depart client #" + (totalDepart - 1) + "  arrive a t=" + dateArrivee);
         }
     }
 
