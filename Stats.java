@@ -44,7 +44,7 @@ public class Stats{
         } else {
             totalTempsVide += diff;
         }
-        tempsDernierEvt = dateCoruante;
+        tempsDernierEvt = dateCourante;
     }
 
     /**

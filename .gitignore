@@ -1,0 +1,10 @@
+# Fichiers compilés Java
+*.class
+
+# Fichiers de log
+*.log
+
+# Fichiers temporaires
+*~
+*.tmp
+*.swp
