@@ -8,3 +8,6 @@
 *~
 *.tmp
 *.swp
+
+#repertoire rapport
+rapport/
