@@ -23,6 +23,11 @@ public class Ech{
             ech.addLast(e);
             return;
         }
+        //cas rapide: insererer au début si date plus petite que la première
+        if(e.getDate() < ech.getFirst().getDate()){
+            ech.addFirst(e);
+            return;
+        }
         //utilisation d'un itérateur pour parcourir la liste
         ListIterator<Evt> it = ech.listIterator();
         int index = 0;

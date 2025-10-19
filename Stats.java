@@ -1,6 +1,6 @@
 /*classe  regroupant la collecte et l'affichage des résultats */
 
-import java.util.ArrayList;
+// (plus besoin d'import ArrayList)
 
 public class Stats{
     private int totalArrivees = 0; //nombre total d'arrivées
@@ -12,7 +12,9 @@ public class Stats{
     private double tempsDernierEvt =0.0; //temps du dernier évènement traité
     private double sommeDureesSejour =0.0; //somme des durées de séjour de tous les clients
     private boolean debug;
-    public ArrayList<Double> listeTempsArrivees; //liste des temps d'arrivée des clients
+    private double[] listeTempsArrivees;
+    private int capacite = 100000;
+    private int taille = 0;
 
 
     /**
@@ -21,7 +23,7 @@ public class Stats{
      */
     public Stats(boolean debug){
         this.debug = debug;
-        this.listeTempsArrivees = new ArrayList<Double>();
+    this.listeTempsArrivees = new double[capacite];
         this.tempsDernierEvt = 0.0;
     }
 
@@ -54,7 +56,13 @@ public class Stats{
      */
     public void enregistrerArrivee(double dateArrivee, boolean fileVide){
         totalArrivees++;
-        listeTempsArrivees.add(dateArrivee);
+        if(taille >= capacite){
+            capacite *= 2;
+            double[] nouveau = new double[capacite];
+            System.arraycopy(listeTempsArrivees, 0, nouveau, 0, taille);
+            listeTempsArrivees = nouveau;
+        }
+        listeTempsArrivees[taille++] = dateArrivee;
         if(fileVide){
             compteurSansAttente++;
         }
@@ -76,25 +84,40 @@ public class Stats{
             System.out.println("Date=" + dateDepart + " Depart client #" + (totalDepart - 1) + "  arrive a t=" + dateArrivee);
         }
     }
+    // Ajouter une méthode plus directe
 
     /**
      * Affiche les résultats théoriques
      */
     public void afficherResultatsTheoriques(double lambda, double mu, double duree) {
         double ro = lambda / mu;
+        double unMoinsRo = 1 - ro;
+        double roSurUnMoinsRo = ro / unMoinsRo;
+        double tempsMoyenSejour = 1 / (mu * unMoinsRo);
         System.out.println("--------------------");
         System.out.println("RESULTATS THEORIQUES");
         System.out.println("--------------------");
         System.out.println("lambda<mu : file stable");
         System.out.println("ro (lambda/mu) = " + ro);
         System.out.println("nombre de clients attendus (lambda x duree) = " + (lambda * duree));
-        System.out.println("Prob de service sans attente (1 - ro) = " + (1 - ro));
+        System.out.println("Prob de service sans attente (1 - ro) = " + unMoinsRo);
         System.out.println("Prob file occupee (ro) = " + ro);
         System.out.println("Debit (lambda) = " + lambda);
-        System.out.println("Esp nb clients (ro/1-ro) = " + (ro / (1 - ro)));
-        System.out.println("Temps moyen de sejour (1/mu(1-ro)) = " + (1 / (mu * (1 - ro))));
+        System.out.println("Esp nb clients (ro/1-ro) = " + roSurUnMoinsRo);
+        System.out.println("Temps moyen de sejour (1/mu(1-ro)) = " + tempsMoyenSejour);
     }
 
+    // Optimisation 11 : méthode combinée pour départ avec tableau primitif
+    public double getEtEnregistrerDepart(double dateDepart) {
+        double dateArrivee = listeTempsArrivees[totalDepart];
+        totalDepart++;
+        double dureeSejour = dateDepart - dateArrivee;
+        sommeDureesSejour += dureeSejour;
+        if (debug) {
+            System.out.println("Date=" + dateDepart + " Depart client #" + (totalDepart - 1) + "  arrive a t=" + dateArrivee);
+        }
+        return dateArrivee;
+    }
     /**
      * Affiche les résultats de simulation
      */
@@ -120,7 +143,7 @@ public class Stats{
      * @return date d'arrivée du client
      */
     public double getTempsArrivee(int index) {
-        return listeTempsArrivees.get(index);
+    return listeTempsArrivees[index];
     }
 
     /**

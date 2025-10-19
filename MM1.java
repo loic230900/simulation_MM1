@@ -112,7 +112,7 @@ public class MM1{
         }
 
         echancier.insertion(Evt.getInstance(dateDepart, Evt.DEPART));
-        dateDernierDepart = Math.max(dateDernierDepart, dateDepart);
+        dateDernierDepart = dateDepart; // mettre à jour la date du dernier départ prévu
 
         nbClientsDansSysteme++;
         numClientCourant++;
@@ -123,11 +123,9 @@ public class MM1{
      * @param dateDepart date du départ du client
      */
     private void traiterDepart(double dateDepart) {
-        // Trouver la date d'arrivée correspondante (FIFO)
-        double dateArrivee = stats.getTempsArrivee(stats.getTotalDepart());
-        
-        stats.enregistrerDepart(dateDepart, dateArrivee);
-        nbClientsDansSysteme--;
+    // Optimisation 11 : méthode combinée
+    stats.getEtEnregistrerDepart(dateDepart);
+    nbClientsDansSysteme--;
     }
 
 }

@@ -22,9 +22,10 @@ public class Utile {
      * @return une durée aléatoire suivant la loi exponentielle de paramètre lambda.
      */
     public static double loiExp(double lambda) {
-        R = tirageU();
-        // Application de la formule inverse : X = -(1/λ) * ln(1 - R)
-        X = -Math.log(1 - R) / lambda;
-        return X;
+    // Optimisation 13 : inlining de tirageU
+    R = Math.random();
+    // Application de la formule inverse : X = -(1/λ) * ln(1 - R)
+    X = -Math.log(1 - R) / lambda;
+    return X;
     }
 }

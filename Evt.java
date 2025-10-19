@@ -1,7 +1,5 @@
 /*classe des évenements: arrivées et départs */
 
-import java.util.LinkedList;
-
 public class Evt{
     //types d'évènements
     public static final int ARRIVEE = 1; 
@@ -9,8 +7,18 @@ public class Evt{
     
     private double date; //date de l'évènement
     private int type; //type de l'évènement 
-    private static LinkedList<Evt> recyclage = new LinkedList<Evt>(); //liste statique pour le recyclage des évènements
-    private static final int TAILLE_MAX_RECYCLAGE = 100; //taille maximale de la liste de recyclage
+    
+    //Pool de recyclage avec tableau circulaire (optimisation #6)
+    private static final int TAILLE_MAX_RECYCLAGE = 10000; //taille maximale du pool de recyclage
+    private static final Evt[] recyclage = new Evt[TAILLE_MAX_RECYCLAGE];
+    private static int indexRecyclage = 0; //index du prochain emplacement disponible
+        // Bloc d'initialisation statique : pré-allocation du pool
+        static {
+            for(int i = 0; i < TAILLE_MAX_RECYCLAGE; i++){
+                recyclage[i] = new Evt();
+            }
+            indexRecyclage = TAILLE_MAX_RECYCLAGE; // pool plein au démarrage
+        }
 
     //constructeur
     /**
@@ -20,14 +28,15 @@ public class Evt{
 
     /**
      * Méthode statique pour obtenir une instance d'Evt (recyclage si possible)
+     * Utilise un tableau circulaire pour un recyclage ultra-rapide
      * @param date date de l'évènement
      * @param type type de l'évènement (ARRIVEE ou DEPART)
      * @return instance d'Evt
      */
     public static Evt getInstance(double date, int type){
         Evt e;
-        if(!recyclage.isEmpty()){
-            e = recyclage.poll();
+        if(indexRecyclage > 0){
+            e = recyclage[--indexRecyclage]; //récupérer du pool (décrémenter puis accéder)
         } else {
             e = new Evt();
         }
@@ -52,11 +61,21 @@ public class Evt{
 
     /*
      * Méthode pour recycler une instance d'Evt
-     * Ajoute l'instance courante à la liste de recyclage
+     * Ajoute l'instance courante au pool de recyclage (tableau circulaire)
      */
     public void recycle(){
-        if(recyclage.size() < TAILLE_MAX_RECYCLAGE){
-            recyclage.add(this);
+        if(indexRecyclage < TAILLE_MAX_RECYCLAGE){
+            recyclage[indexRecyclage++] = this; //stocker dans le pool (accéder puis incrémenter)
         }
+    }
+    
+    public void afficherResultatsTheoriques(double lambda, double mu, double duree) {
+        double ro = lambda / mu;
+        double unMoinsRo = 1 - ro;
+        double roSurUnMoinsRo = ro / unMoinsRo;
+        
+        System.out.println("Prob de service sans attente (1 - ro) = " + unMoinsRo);
+        System.out.println("Esp nb clients (ro/1-ro) = " + roSurUnMoinsRo);
+        System.out.println("Temps moyen de sejour (1/mu(1-ro)) = " + (1 / (mu * unMoinsRo)));
     }
 }
