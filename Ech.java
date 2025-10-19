@@ -1,5 +1,6 @@
 /*classe de l'échéancier */
 import java.util.LinkedList;
+import java.util.ListIterator;
 
 public class Ech{
     private LinkedList<Evt> ech; //liste des évènements
@@ -9,7 +10,7 @@ public class Ech{
      */
     public Ech(){
         ech = new LinkedList<Evt>();
-        ech.add(new Evt(0.0, Evt.ARRIVEE)); //à t=0, un évènement d'arrivée est programmé
+        ech.add(Evt.getInstance(0.0,Evt.ARRIVEE)); //à t=0, un évènement d'arrivée est programmé
     }
 
     /**
@@ -17,13 +18,31 @@ public class Ech{
      * @param e évènement à insérer
      */
     public void insertion(Evt e){
+        //cas rapide: insererer a la fin si date plus grande que la dernière
+        if(ech.isEmpty() || e.getDate() >= ech.getLast().getDate()){
+            ech.addLast(e);
+            return;
+        }
+        //utilisation d'un itérateur pour parcourir la liste
+        ListIterator<Evt> it = ech.listIterator();
+        int index = 0;
+        while(it.hasNext()){
+            if(it.next().getDate() > e.getDate()){
+                break;
+            }
+            index++;
+        }
+        ech.add(index, e);
+    }
+    /** fonction alternative utilisant une boucle
+    public void insertion(Evt e){
         int i = 0;
         //insertion triée par date
         while(i < ech.size() && ech.get(i).getDate() <= e.getDate()){
             i++;
         }
         ech.add(i, e);
-    }
+    }*/
 
     /**
      * Extrait et retourne le premier évènement de l'échéancier

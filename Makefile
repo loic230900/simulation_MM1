@@ -3,7 +3,7 @@
 # Variables par défaut
 LAMBDA ?= 5
 MU ?= 6
-DUREE ?= 1000000
+DUREE ?= 10000000
 DEBUG ?= 0
 
 # Compilation de tous les fichiers Java

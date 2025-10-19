@@ -76,6 +76,9 @@ public class MM1{
             } else {
                 System.err.println("Erreur: type d'évènement inconnu.");
             }
+
+            // recycler l'évènement traité
+            evt.recycle();
         }
         //affichage des statistiques finales
         stats.afficherResultatsTheoriques(lambda, mu, dureeSimulation);
@@ -95,7 +98,7 @@ public class MM1{
         //programmer la prochaine arrivée
         double prochaineArrivee = dateArrivee + Utile.loiExp(lambda);
         if(prochaineArrivee <= dureeSimulation){
-            echancier.insertion(new Evt(prochaineArrivee, Evt.ARRIVEE));
+            echancier.insertion(Evt.getInstance(prochaineArrivee, Evt.ARRIVEE));
         }
 
         //programmer depart du client courant
@@ -108,7 +111,7 @@ public class MM1{
             dateDepart = dateDernierDepart + Utile.loiExp(mu);
         }
 
-        echancier.insertion(new Evt(dateDepart, Evt.DEPART));
+        echancier.insertion(Evt.getInstance(dateDepart, Evt.DEPART));
         dateDernierDepart = Math.max(dateDernierDepart, dateDepart);
 
         nbClientsDansSysteme++;
