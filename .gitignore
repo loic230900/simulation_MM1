@@ -20,11 +20,8 @@
 *.toc
 
 # Fichiers de données
-*.dat
-*.csv
+script/*.dat
 
-# Reproduire les scripts et données
-script/sim_results.csv
 
 # Repertoires à exclure  
 

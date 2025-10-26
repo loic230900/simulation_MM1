@@ -20,7 +20,6 @@ public class Evt{
             indexRecyclage = TAILLE_MAX_RECYCLAGE; // pool plein au démarrage
         }
 
-    //constructeur
     /**
      * Constructeur privé de la classe Evt
     */
@@ -61,21 +60,11 @@ public class Evt{
 
     /*
      * Méthode pour recycler une instance d'Evt
-     * Ajoute l'instance courante au pool de recyclage (tableau circulaire)
+     * Ajoute l'instance courante au tableau de recyclage (tableau circulaire)
      */
     public void recycle(){
         if(indexRecyclage < TAILLE_MAX_RECYCLAGE){
             recyclage[indexRecyclage++] = this; //stocker dans le pool (accéder puis incrémenter)
         }
-    }
-    
-    public void afficherResultatsTheoriques(double lambda, double mu, double duree) {
-        double ro = lambda / mu;
-        double unMoinsRo = 1 - ro;
-        double roSurUnMoinsRo = ro / unMoinsRo;
-        
-        System.out.println("Prob de service sans attente (1 - ro) = " + unMoinsRo);
-        System.out.println("Esp nb clients (ro/1-ro) = " + roSurUnMoinsRo);
-        System.out.println("Temps moyen de sejour (1/mu(1-ro)) = " + (1 / (mu * unMoinsRo)));
     }
 }

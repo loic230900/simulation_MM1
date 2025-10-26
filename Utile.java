@@ -1,18 +1,30 @@
 /*class regroupant totues les méthodes statiques utile(tirage aléatoire, loi eponentielle, etc) */
 
+import java.util.Random;
+
 public class Utile {
     private static double R;      // variable aléatoire uniforme entre 0 et 1
-    private static double X;      // variable aléatoire suivant la loi exponentielle
+    private static Random random = new Random(); // Générateur aléatoire avec seed contrôlable
 
-    // Constructeur privé pour empêcher l'instanciation de cette classe utilitaire
+    /**
+     * Constructeur privé pour empêcher l'instanciation de cette classe utilitaire
+     */
     private Utile() { }
+
+    /**
+     * Définit la graine (seed) du générateur aléatoire pour la reproductibilité
+     * @param seed graine pour le générateur pseudo-aléatoire
+     */
+    public static void setSeed(long seed) {
+        random = new Random(seed);
+    }
 
     /**
      * Génère un tirage aléatoire uniforme dans [0,1[.
      * @return une valeur aléatoire uniforme entre 0.0 (inclus) et 1.0 (exclus).
      */
     public static double tirageU() {
-        R = Math.random();  // Math.random() génère un nombre aléatoire entre 0 et 1
+        R = random.nextDouble();  // Utilise le générateur Random avec seed contrôlable
         return R;
     }
     
@@ -22,10 +34,9 @@ public class Utile {
      * @return une durée aléatoire suivant la loi exponentielle de paramètre lambda.
      */
     public static double loiExp(double lambda) {
-    // Optimisation 13 : inlining de tirageU
-    R = Math.random();
-    // Application de la formule inverse : X = -(1/λ) * ln(1 - R)
-    X = -Math.log(1 - R) / lambda;
-    return X;
+        double r = random.nextDouble();
+        // Application de la formule inverse : X = -(1/λ) * ln(1 - R)
+        // Éviter ln(0) en utilisant ln(R) au lieu de ln(1-R) quand R est proche de 1
+        return -Math.log(r) / lambda;
     }
 }

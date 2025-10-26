@@ -13,7 +13,7 @@ public class Stats{
     private double sommeDureesSejour =0.0; //somme des durées de séjour de tous les clients
     private boolean debug;
     private double[] listeTempsArrivees;
-    private int capacite = 100000;
+    private int capacite = 1000000; // Augmenter la capacité initiale pour éviter les redimensionnements
     private int taille = 0;
 
 
@@ -56,8 +56,9 @@ public class Stats{
      */
     public void enregistrerArrivee(double dateArrivee, boolean fileVide){
         totalArrivees++;
+        // Optimisation : redimensionnement plus efficace avec croissance exponentielle
         if(taille >= capacite){
-            capacite *= 2;
+            capacite = capacite + (capacite >> 1); // Croissance de 50% au lieu de doubler
             double[] nouveau = new double[capacite];
             System.arraycopy(listeTempsArrivees, 0, nouveau, 0, taille);
             listeTempsArrivees = nouveau;
@@ -88,6 +89,10 @@ public class Stats{
 
     /**
      * Affiche les résultats théoriques
+     * @param lambda taux d'arrivée
+     * @param mu taux de service
+     * @param duree durée de la simulation
+     * @return void
      */
     public void afficherResultatsTheoriques(double lambda, double mu, double duree) {
         double ro = lambda / mu;
@@ -107,7 +112,11 @@ public class Stats{
         System.out.println("Temps moyen de sejour (1/mu(1-ro)) = " + tempsMoyenSejour);
     }
 
-    // Optimisation 11 : méthode combinée pour départ avec tableau primitif
+    /**
+     * Enregistre le départ d'un client
+     * @param dateDepart date de départ du client
+     * @return date d'arrivée du client
+     */
     public double getEtEnregistrerDepart(double dateDepart) {
         double dateArrivee = listeTempsArrivees[totalDepart];
         totalDepart++;
@@ -120,6 +129,8 @@ public class Stats{
     }
     /**
      * Affiche les résultats de simulation
+     * @param dureeSimulation durée de la simulation
+     * @return void
      */
     public void afficherResultatsSimulation(double dureeSimulation) {
         System.out.println("--------------------");

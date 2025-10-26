@@ -33,18 +33,24 @@ public class MM1{
 
     /**
      * Méthode principale du programme
-     * @param args arguments de la ligne de commande : lambda, mu, durée, debug
+     * @param args arguments de la ligne de commande : lambda, mu, durée, debug, [seed]
      */
     public static void main(String[] args){
         //verification et parsing des arguments
-        if (args.length != 4) {
-            System.err.println("Usage: java MM1 <lambda> <mu> <duree> <debug>");
+        if (args.length != 4 && args.length != 5) {
+            System.err.println("Usage: java MM1 <lambda> <mu> <duree> <debug> [seed]");
             System.exit(1); 
         }
         double lambda = Double.parseDouble(args[0]);
         double mu = Double.parseDouble(args[1]);
         double duree = Double.parseDouble(args[2]);
-        boolean debug = Integer.parseInt(args[3]) == 1; 
+        boolean debug = Integer.parseInt(args[3]) == 1;
+        
+        // Si une graine est fourni, l'utiliser pour la reproductibilité
+        if (args.length == 5) {
+            long seed = Long.parseLong(args[4]);
+            Utile.setSeed(seed);
+        }
         
         //creation de l'instance MM1 et lancement de la simulation
         MM1 simulation = new MM1(lambda, mu, duree, debug);
@@ -107,8 +113,9 @@ public class MM1{
             //file vide, le client est servi immédiatement
             dateDepart = dateArrivee + Utile.loiExp(mu);
         } else {
-            //file non vide, le client attend la fin du service du client courant
-            dateDepart = dateDernierDepart + Utile.loiExp(mu);
+            //file non vide, le client attend la fin du service du client précédent
+            // Le temps de service commence après le départ du client précédent
+            dateDepart = Math.max(dateDernierDepart, dateArrivee) + Utile.loiExp(mu);
         }
 
         echancier.insertion(Evt.getInstance(dateDepart, Evt.DEPART));
@@ -123,7 +130,6 @@ public class MM1{
      * @param dateDepart date du départ du client
      */
     private void traiterDepart(double dateDepart) {
-    // Optimisation 11 : méthode combinée
     stats.getEtEnregistrerDepart(dateDepart);
     nbClientsDansSysteme--;
     }

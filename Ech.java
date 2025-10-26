@@ -39,7 +39,7 @@ public class Ech{
         }
         ech.add(index, e);
     }
-    /** fonction alternative utilisant une boucle
+    /** fonction alternative utilisant une boucle , moins optimisée
     public void insertion(Evt e){
         int i = 0;
         //insertion triée par date
