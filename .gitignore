@@ -9,5 +9,33 @@
 *.tmp
 *.swp
 
-#repertoire rapport
-rapport/
+# PDF et fichiers LaTeX
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.out
+*.synctex.gz
+*.toc
+
+# Fichiers de données
+*.dat
+*.csv
+
+# Reproduire les scripts et données
+script/sim_results.csv
+
+# Repertoires à exclure  
+
+
+# Garder rapport/.tex et ressources mais ignorer fichiers temporaires
+rapport/*.aux
+rapport/*.bbl
+rapport/*.blg
+rapport/*.fdb_latexmk
+rapport/*.fls
+rapport/*.log
+rapport/*.out
+rapport/*.synctex.gz
+rapport/*.toc
